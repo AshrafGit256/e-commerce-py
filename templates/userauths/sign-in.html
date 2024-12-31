@@ -39,19 +39,21 @@
 							    			<input type="password" class="form-control" name="password" required>
 							    		</div><!-- End .form-group -->
 
-							    		<div class="form-footer">
-							    			<button type="submit" class="btn btn-outline-primary-2">
-			                					<span>LOG IN</span>
-			            						<i class="icon-long-arrow-right"></i>
-			                				</button>
-
-			                				<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="signin-remember-2">
-												<label class="custom-control-label" for="signin-remember-2">Remember Me</label>
-											</div><!-- End .custom-checkbox -->
-
-											<a href="#" class="forgot-link">Forgot Your Password?</a>
-							    		</div><!-- End .form-footer -->
+							    		<div class="form-footer" style="text-align: center; margin-top: 20px;">
+											<!-- Log In Button -->
+											<button type="submit" class="btn btn-outline-primary-2" style="width: 100%; margin-bottom: 15px; border: 1px solid #d2b48c; background: none; color:rgb(53, 52, 51); padding: 10px; border-radius: 4px; font-size: 16px;"  onmouseover="this.style.background='#d2b48c'; this.style.color='white';" onmouseout="this.style.background='none'; this.style.color='rgb(53, 52, 51)';">
+												<span>LOG IN</span>
+												<i class="icon-long-arrow-right"></i>
+											</button>
+										
+											<!-- Additional Links Section -->
+											<div style="display: flex; justify-content: center; gap: 10px; font-size: 14px;">
+												<a href="http://127.0.0.1:8000/user/sign-up/" class="create-account" style="color:rgb(175, 146, 67); text-decoration: none; font-weight: 500;">Create Account</a>
+												<span style="color: #6c757d;">|</span>
+												<a href="#" class="forgot-link" style="color:rgba(230, 184, 84, 0.79); text-decoration: none; font-weight: 500;">Forgot Your Password?</a>
+											</div>
+										</div>
+										
 							    	</form>
 							    	<div class="form-choice">
 								    	<p class="text-center">or sign in with</p>
