@@ -3,8 +3,8 @@
 {% load static %}
 
 {% block content %}
-  <main class="main">
-    <div class="page-header text-center" style="background-image: url('{% static "assets/images/page-header-bg.jpg" %}');">>
+  <main class="main" style="padding:15px">
+    <div class="page-header text-center" style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}');">>
       <div class="container-fluid">
         <h1 class="page-title">Categories<span>Shop</span></h1>
       </div>
@@ -38,12 +38,12 @@
             {% for c in categories %}
             <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4"> <!-- Four columns per row -->
               <div class="banner banner-cat banner-badge">
-                <a href="#"><img src="{{ c.image.url }}" alt="Banner" class="img-fluid" /></a>
+                <a href="{% url 'core:category-product-list' c.cid %}"><img src="{{ c.image.url }}" alt="Banner" class="img-fluid" /></a>
     
-                <a class="banner-link" href="#">
+                <a class="banner-link" href="{% url 'core:category-product-list' c.cid %}">
                   <h3 class="banner-title">{{ c.title }}</h3><!-- End .banner-title -->
                   <h4 class="banner-subtitle">{{ c.category.count }} Product{{ c.category.count|pluralize }}</h4><!-- End .banner-subtitle -->
-                  <span class="banner-link-text">Shop Now</span>
+                  <span class="banner-link-text">Explore Now</span>
                 </a><!-- End .banner-link -->
               </div>
               <!-- End .banner -->
