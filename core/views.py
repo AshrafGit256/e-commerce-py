@@ -59,3 +59,13 @@ def vendor_list_view(request):
         "vendors": vendors,  # Use a different variable name
     }
     return render(request, "core/vendor-list.html", context)
+
+def vendor_detail_view(request, vid):
+    vendor = Vendor.objects.get(vid=vid)  # Correct model reference
+    products = Product.objects.filter(vendor=vendor, product_status = "published")
+    
+    context = {
+        "vendor": vendor,  # Use a different variable name
+        "products": products,  # Use a different variable name
+    }
+    return render(request, "core/vendor-detail.html", context)

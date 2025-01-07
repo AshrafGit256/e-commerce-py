@@ -1,0 +1,378 @@
+{% extends 'partials/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 0;
+        text-align: center;
+    }
+
+    .vendor-image img {
+        width: 260px;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .social-icons a {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        text-decoration: none;
+        color: white;
+        margin-left: 5px;
+        font-size: 20px;
+    }
+
+    /* Lighter Brown Vertical Separator */
+    .separator {
+        border-right: 2px solid #A0522D; /* Light brown */
+    }
+
+    .content-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .entry-meta,
+    .entry-cats {
+        margin-bottom: 15px;
+    }
+
+    .ratings-text {
+        font-size: 14px;
+    }
+
+    .page-title {
+        font-weight: bold;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .social-icons {
+        margin-top: 20px;
+    }
+
+    p {
+        color: white;
+        font-size: 20px;
+    }
+
+    h2.a {
+        color: white;
+        font-size: 20px;
+    }
+
+</style>
+
+<div class="page-header text-center d-flex align-items-center"
+    style="background-image: url({{ vendor.cover_image.url }});
+           min-height: 200px; 
+           max-width: 1800px; 
+           background-position: center; 
+           background-size: cover; 
+           border-radius: 15px; 
+           margin: 15px;
+           overflow: hidden;">
+
+    <div class="container">
+        <div class="row text-center align-items-stretch">
+
+            <!-- Column 1: Vendor Image -->
+            <div class="col-md-3 separator">
+                <div class="content-wrapper">
+                    <div class="vendor-image">
+                        <img src="{{ vendor.image.url }}" alt="{{ vendor.name }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: Vendor Details -->
+            <div class="col-md-3 separator">
+                <div class="content-wrapper">
+                    <div class="entry-meta">
+                        <p><strong>Since:</strong> {{ vendor.date|date:"Y" }}</p>
+                    </div>
+
+                    <div class="entry-meta">
+                        <p><strong>Products:</strong> {{ vendor.product.all.count }} Product{{ vendor.product.all.count|pluralize }}</p>
+                    </div>
+
+                    <h2 class="entry-title" style="color: white; font-weight:10px;">
+                        <a href="#">{{ vendor.title }}</a>
+                    </h2>
+
+                    <div class="ratings-container d-flex align-items-center justify-content-center gap-2">
+                        <div class="ratings">
+                            <div class="ratings-val" style="width: 80%;"></div>
+                        </div>
+                        <span class="ratings-text">( 6 Reviews )</span>
+                    </div>
+
+                    <div class="entry-cats mt-2">
+                        <p>{{ vendor.description }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3: Contact Information -->
+            <div class="col-md-3 separator">
+                <div class="content-wrapper">
+                    <div class="entry-cats">
+                        <p><i class="bi bi-geo-alt"></i> {{ vendor.address }}</p>
+                        <p><i class="bi bi-telephone"></i> {{ vendor.contact }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4: Follow Us Section -->
+            <div class="col-md-3">
+                <div class="content-wrapper">
+                    <h1 class="page-title" style="color: white; font-weight:10px;">Follow<span> Me</span></h1>
+
+                    <div class="mt-3 d-flex justify-content-center gap-2 social-icons">
+                        <a href="#" class="bg-primary"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="bg-info"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="bg-danger"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="bg-dark"><i class="bi bi-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End .row -->
+    </div> <!-- End .container -->
+
+</div> <!-- End .page-header -->
+
+
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-9 col-xxl-10">
+                
+
+
+                <div class="mb-2"></div><!-- End .mb-5 -->
+                
+                <div>
+                    We found <b>{{products.count}}</b> product{{ v.product.all.count|pluralize }} for you
+                </div>
+
+                <div class="bg-lighter trending-products">
+                    <div class="heading heading-flex mb-3">
+                        <div class="heading-left">
+                            <h2 class="title">Products</h2><!-- End .title -->
+                        </div><!-- End .heading-left -->
+
+                       <div class="heading-right">
+                            <ul class="nav nav-pills justify-content-center" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="trending-all-link" data-toggle="tab" href="#trending-all-tab" role="tab" aria-controls="trending-all-tab" aria-selected="true">All</a>
+                                </li>
+                                
+                            </ul>
+                       </div><!-- End .heading-right -->
+                    </div><!-- End .heading -->
+
+                    <div class="tab-content tab-content-carousel">
+                        <div class="tab-pane p-0 fade show active" id="trending-all-tab" role="tabpanel" aria-labelledby="trending-all-link">
+                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                                data-owl-options='{
+                                    "nav": false, 
+                                    "dots": true,
+                                    "margin": 20,
+                                    "loop": false,
+                                    "responsive": {
+                                        "0": {
+                                            "items":1
+                                        },
+                                        "480": {
+                                            "items":2
+                                        },
+                                        "768": {
+                                            "items":3
+                                        },
+                                        "992": {
+                                            "items":4
+                                        },
+                                        "1200": {
+                                            "items":3,
+                                            "nav": true
+                                        },
+                                        "1600": {
+                                            "items":5,
+                                            "nav": true
+                                        }
+                                    }
+                                }'>
+                                {% for p in products %}
+                                <div class="product text-center">
+                                    <figure class="product-media">
+                                        <span class="product-label label-sale">-{{ p.get_percentage | floatformat:0 }}% off</span>
+                                        <a href="product.html">
+                                            <img src="{{ p.image.url }}" alt="Product image" class="product-image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                        </div><!-- End .product-action-vertical -->
+
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">{{p.category.title}}</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a href="product.html">{{p.title|truncatechars:15}}</a></h3><!-- End .product-title -->
+                                        
+                                        <p>{{ p.description|truncatechars:5 }}</p>
+                                        
+                                        <div class="product-price">
+                                            <span class="new-price">{{ p.price }}</span>
+                                            <span class="old-price"><s>{{ p.old_price }}</s></span>
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text">( 2 Reviews )</span>
+                                        </div><!-- End .rating-container -->
+
+                                        
+                                        
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+                                {% endfor %}
+
+                            </div><!-- End .owl-carousel -->
+                        </div><!-- .End .tab-pane -->
+                        
+                    </div><!-- End .tab-content -->
+                </div><!-- End .bg-lighter -->
+
+                <div class="mb-5"></div><!-- End .mb-5 -->
+
+                
+
+                <div class="mb-5"></div><!-- End .mb-5 -->
+            </div><!-- End .col-lg-9 col-xxl-10 -->
+
+            <aside class="col-xl-3 col-xxl-2 order-xl-first">
+                <div class="sidebar sidebar-home">
+                    <div class="row">
+                        
+                        <div class="col-sm-6 col-xl-12 mb-2">
+                            <div class="widget widget-products">
+                                <h4 class="widget-title"><span>Categories</span></h4><!-- End .widget-title -->
+
+                                <div class="products">
+
+                                    {% for c in categories %}
+                                    <div class="product product-sm">
+                                        
+                                        <figure class="product-media">
+                                            <a href="product.html">
+                                                <img src="{{ c.image.url }}" alt="{{ c.title }}" class="product-image">
+                                            </a>
+                                        </figure>
+
+                                        <div class="product-body">
+                                            <h5 class="product-title"><a href="product.html">{{ c.title }}</a></h5><!-- End .product-title -->
+                                            <div class="product-price">
+                                                {{products.count}}</span> product{{products.count|pluralize}}
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                        
+                                    </div><!-- End .product product-sm -->
+                                    {% endfor %}   
+                                                                    
+                                </div><!-- End .products -->
+                            </div><!-- End .widget widget-products -->
+                        </div><!-- End .col-sm-6 col-xl-12 -->
+                        
+                        <div class="col-12">
+                            <div class="widget widget-deals">
+                                <h4 class="widget-title"><span>Special Offer</span></h4><!-- End .widget-title -->
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-xl-12">
+                                        <div class="product text-center">
+                                            <figure class="product-media">
+                                                <span class="product-label label-sale">Deal of the week</span>
+                                                <a href="product.html">
+                                                    <img src="{% static 'assets/images/demos/demo-14/products/deals/product-1.jpg' %}" alt="Product image" class="product-image">
+                                                </a>
+
+                                                <div class="product-action-vertical">
+                                                    <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                                </div><!-- End .product-action-vertical -->
+
+                                                <div class="product-action">
+                                                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                                </div><!-- End .product-action -->
+                                            </figure><!-- End .product-media -->
+
+                                            <div class="product-body">
+                                                <div class="product-cat">
+                                                    <a href="#">Audio</a>
+                                                </div><!-- End .product-cat -->
+                                                <h3 class="product-title"><a href="product.html">Bose SoundLink Micro speaker</a></h3><!-- End .product-title -->
+                                                <div class="product-price">
+                                                    <span class="new-price">$99.99</span>
+                                                    <span class="old-price">Was $110.99</span>
+                                                </div><!-- End .product-price -->
+                                                <div class="ratings-container">
+                                                    <div class="ratings">
+                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                    </div><!-- End .ratings -->
+                                                    <span class="ratings-text">( 4 Reviews )</span>
+                                                </div><!-- End .rating-container -->
+
+                                                <div class="product-nav product-nav-dots">
+                                                    <a href="#" class="active" style="background: #f3815f;"><span class="sr-only">Color name</span></a>
+                                                    <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                                </div><!-- End .product-nav -->
+                                            </div><!-- End .product-body -->
+
+                                            <div class="product-countdown" data-until="+44h" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
+                                        </div><!-- End .product -->
+                                    </div><!-- End .col-sm-6 col-xl-12 -->
+
+                                    
+                                </div><!-- End .row -->
+                            </div><!-- End .widget widget-deals -->
+                        </div><!-- End .col-sm-6 col-lg-xl -->
+                        
+                        
+                    </div><!-- End .row -->
+                </div><!-- End .sidebar sidebar-home -->
+            </aside><!-- End .col-lg-3 col-xxl-2 -->
+        </div><!-- End .row -->
+    </div><!-- End .container-fluid -->
+</main><!-- End .main -->
+
+{% endblock %}
