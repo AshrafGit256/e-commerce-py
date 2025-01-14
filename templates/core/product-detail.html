@@ -1,0 +1,790 @@
+{% extends 'partials/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<style>
+.product-gallery {
+    text-align: center;
+}
+
+/* Main Image Slider */
+.product-main-slider {
+    position: relative;
+    max-width: 100%;
+}
+
+.product-main-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Arrow Buttons */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    
+    color:  rgba(83, 83, 83, 0.6);
+    border: none;
+    padding: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: background 0.3s;
+    border-radius: 60%;
+}
+
+.slider-arrow:hover {
+    background: rgba(134, 134, 134, 0.8);
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/* Thumbnail Section */
+.thumbnail-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    position: relative;
+}
+
+.product-image-gallery {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    max-width: 300px; /* Adjust as needed */
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.product-gallery-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border 0.3s;
+}
+
+.product-gallery-item.active img {
+    border: 2px solid #007bff;
+}
+
+/* Show thumbnail arrows only if there are more than 4 images */
+.thumb-prev,
+.thumb-next {
+    display: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 50%;
+}
+
+.thumb-prev:hover,
+.thumb-next:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.thumb-prev {
+    left: 0;
+}
+
+.thumb-next {
+    right: 0;
+}
+
+.btn-cart,
+.btn-cart:active,
+.btn-cart:focus {
+    background: none !important;
+    background-color: transparent !important;
+}
+
+.btn-cart:hover {
+    background-color: #FFA500;
+}
+
+.vendor-image {
+    width: 100px;  /* Adjust as needed */
+    height: 100px; /* Keep equal to width */
+    border-radius: 50%; /* Makes it a perfect circle */
+    object-fit: cover; /* Ensures the image fills the circle */
+}
+
+.category-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+</style>
+
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Products</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">With Sidebar</li>
+                    </ol>
+
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="product-details-top">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="product-gallery">
+                                            <!-- Main Image Slider -->
+                                            <div class="product-main-slider">
+                                                <button id="prev-main" class="slider-arrow prev">&#10094;</button>
+                                        
+                                                <figure class="product-main-image">
+                                                    <img id="product-zoom" src="{{ p.image.url }}" alt="product image">
+                                                </figure>
+                                        
+                                                {% for image in p_image %}
+                                                <figure class="product-main-image hidden">
+                                                    <img src="{{ image.image.url }}" alt="product image">
+                                                </figure>
+                                                {% endfor %}
+                                        
+                                                <button id="next-main" class="slider-arrow next">&#10095;</button>
+                                            </div>
+                                        
+                                            <!-- Thumbnail Gallery -->
+                                            <div class="thumbnail-container">
+                                                <button id="prev-thumb" class="slider-arrow thumb-prev">&#10094;</button>
+                                        
+                                                <div id="product-zoom-gallery" class="product-image-gallery">
+                                                    <a class="product-gallery-item active" href="#" data-image="{{ p.image.url }}">
+                                                        <img src="{{ p.image.url }}" alt="product side">
+                                                    </a>
+                                        
+                                                    {% for image in p_image %}
+                                                    <a class="product-gallery-item" href="#" data-image="{{ image.image.url }}">
+                                                        <img src="{{ image.images.url }}" alt="product side">
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                        
+                                                <button id="next-thumb" class="slider-arrow thumb-next">&#10095;</button>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div><!-- End .col-md-6 -->
+
+                                    <div class="col-md-6">
+                                        <div class="product-details product-details-sidebar">
+                                            <h1 class="product-title">{{p.title}}</h1><!-- End .product-title -->
+
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                                <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                            </div><!-- End .rating-container -->
+
+                                            
+
+                                            <div class="product-price">
+                                                   <span class="new-price">${{ p.price }}</span>
+                                                   <span class="old-price">Was <s>${{ p.old_price }}</s></span>
+                                               </div><!-- End .product-price -->
+
+                                            <div class="product-content">
+                                                <p>{{p.description|truncatechars:30}}</p>
+                                            </div><!-- End .product-content -->
+
+                                            <div class="details-filter-row details-row-size">
+                                                <label>Color:</label>
+
+                                                <div class="product-nav product-nav-dots">
+                                                    <a href="#" class="active" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                                    <a href="#" style="background: #efe7db;"><span class="sr-only">Color name</span></a>
+                                                </div><!-- End .product-nav -->
+                                            </div><!-- End .details-filter-row -->
+
+                                            <!-- <div class="details-filter-row details-row-size">
+                                                <label for="size">Size:</label>
+                                                <div class="select-custom">
+                                                    <select name="size" id="size" class="form-control">
+                                                        <option value="#" selected="selected">Select a size</option>
+                                                        <option value="s">Small</option>
+                                                        <option value="m">Medium</option>
+                                                        <option value="l">Large</option>
+                                                        <option value="xl">Extra Large</option>
+                                                    </select>
+                                                </div>
+
+                                                <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
+                                            </div> -->
+
+                                            <div class="product-details-action">
+                                                <div class="details-action-col">
+                                                    <label for="qty">Qty:</label>
+                                                    <div class="product-details-quantity">
+                                                        <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                                    </div><!-- End .product-details-quantity -->
+
+                                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                </div><!-- End .details-action-col -->
+
+                                                <div class="details-action-wrapper">
+                                                    <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
+                                                </div><!-- End .details-action-wrapper -->
+                                            </div><!-- End .product-details-action -->
+
+                                            <div class="row">
+                                                <!-- Left Column -->
+                                                <div class="col-md-6">
+                                                    <div class="product-details-footer">
+                                                        <div class="product-cat">
+                                                            <div class="mb-2"><span>Type:</span> <a href="#">{{p.type}}</a></div>
+                                                            <div class="mb-2"><span>MFG:</span> <a href="#">{{p.mfd|date:"d M, Y"}}</a></div>
+                                                            <div><span>Life:</span> <a href="#">{{p.life}}</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                                <!-- Right Column -->
+                                                <div class="col-md-6 text-end">
+                                                    <div class="product-details-footer">
+                                                        <div class="product-cat">
+                                                            <div class="mb-2"><span>SKU:</span> <a href="#">{{p.sku}}</a></div>
+                                                            <div class="mb-2"><span>MFG:</span> <a href="#">{{p.mfd|date:"d M, Y"}}</a></div>
+                                                            <div><span>Stock:</span> <a href="#"><b>{{p.stock_count}}</b> items in stock</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div><!-- End .product-details -->
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .product-details-top -->
+
+                            <div class="product-details-tab">
+                                <ul class="nav nav-pills justify-content-center" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+                                        <div class="product-desc-content">
+                                            <h3>Product Information</h3>
+                                            <p>{{p.description}}</p>
+                                            
+                                        </div><!-- End .product-desc-content -->
+                                    </div><!-- .End .tab-pane -->
+                                    <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
+                                        <div class="product-desc-content">
+                                            <h3>Information</h3>
+                                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. </p>
+
+                                            <h3>Fabric & care</h3>
+                                            <ul>
+                                                <li>Faux suede fabric</li>
+                                                <li>Gold tone metal hoop handles.</li>
+                                                <li>RI branding</li>
+                                                <li>Snake print trim interior </li>
+                                                <li>Adjustable cross body strap</li>
+                                                <li> Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop: 61cm</li>
+                                            </ul>
+
+                                            <h3>Size</h3>
+                                            <p>one size</p>
+                                        </div><!-- End .product-desc-content -->
+                                    </div><!-- .End .tab-pane -->
+                                    <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
+                                        <div class="product-desc-content">
+                                            <h3>Delivery & returns</h3>
+                                            <p>We deliver to over 100 countries around the world. For full details of the delivery options we offer, please view our <a href="#">Delivery information</a><br>
+                                            We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
+                                        </div><!-- End .product-desc-content -->
+                                    </div><!-- .End .tab-pane -->
+                                    <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
+                                        <div class="reviews">
+                                            <h3>Reviews (2)</h3>
+                                            <div class="review">
+                                                <div class="row no-gutters">
+                                                    <div class="col-auto">
+                                                        <h4><a href="#">Samanta J.</a></h4>
+                                                        <div class="ratings-container">
+                                                            <div class="ratings">
+                                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                                            </div><!-- End .ratings -->
+                                                        </div><!-- End .rating-container -->
+                                                        <span class="review-date">6 days ago</span>
+                                                    </div><!-- End .col -->
+                                                    <div class="col">
+                                                        <h4>Good, perfect size</h4>
+
+                                                        <div class="review-content">
+                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!</p>
+                                                        </div><!-- End .review-content -->
+
+                                                        <div class="review-action">
+                                                            <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
+                                                            <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                                        </div><!-- End .review-action -->
+                                                    </div><!-- End .col-auto -->
+                                                </div><!-- End .row -->
+                                            </div><!-- End .review -->
+
+                                            <div class="review">
+                                                <div class="row no-gutters">
+                                                    <div class="col-auto">
+                                                        <h4><a href="#">John Doe</a></h4>
+                                                        <div class="ratings-container">
+                                                            <div class="ratings">
+                                                                <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                                                            </div><!-- End .ratings -->
+                                                        </div><!-- End .rating-container -->
+                                                        <span class="review-date">5 days ago</span>
+                                                    </div><!-- End .col -->
+                                                    <div class="col">
+                                                        <h4>Very good</h4>
+
+                                                        <div class="review-content">
+                                                            <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!</p>
+                                                        </div><!-- End .review-content -->
+
+                                                        <div class="review-action">
+                                                            <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                                            <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                                        </div><!-- End .review-action -->
+                                                    </div><!-- End .col-auto -->
+                                                </div><!-- End .row -->
+                                            </div><!-- End .review -->
+                                        </div><!-- End .reviews -->
+                                    </div><!-- .End .tab-pane -->
+                                    
+                                    
+                                </div><!-- End .tab-content -->
+                            </div><!-- End .product-details-tab -->
+
+                            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+                            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                                data-owl-options='{
+                                    "nav": false, 
+                                    "dots": true,
+                                    "margin": 20,
+                                    "loop": false,
+                                    "responsive": {
+                                        "0": {
+                                            "items":1
+                                        },
+                                        "480": {
+                                            "items":2
+                                        },
+                                        "768": {
+                                            "items":3
+                                        },
+                                        "992": {
+                                            "items":4
+                                        },
+                                        "1200": {
+                                            "items":4,
+                                            "nav": true,
+                                            "dots": false
+                                        }
+                                    }
+                                }'>
+                                <div class="product product-7 text-center">
+                                    <figure class="product-media">
+                                        <span class="product-label label-new">New</span>
+                                        <a href="product.html">
+                                            <img src="{% static 'assets/images/products/product-4.jpg' %}" alt="Product image" class="product-image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                        </div><!-- End .product-action-vertical -->
+
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">Women</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a href="product.html">Brown paperbag waist pencil skirt</a></h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            $60.00
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text">( 2 Reviews )</span>
+                                        </div><!-- End .rating-container -->
+
+                                        <div class="product-nav product-nav-dots">
+                                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
+                                            <a href="#" style="background: #7fc5ed;"><span class="sr-only">Color name</span></a>
+                                            <a href="#" style="background: #e8c97a;"><span class="sr-only">Color name</span></a>
+                                        </div><!-- End .product-nav -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+
+                                <div class="product product-7 text-center">
+                                    <figure class="product-media">
+                                        <span class="product-label label-out">Out of Stock</span>
+                                        <a href="product.html">
+                                            <img src="{% static 'assets/images/products/product-6.jpg' %}" alt="Product image" class="product-image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                        </div><!-- End .product-action-vertical -->
+
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">Jackets</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a href="product.html">Khaki utility boiler jumpsuit</a></h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            <span class="out-price">$120.00</span>
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text">( 6 Reviews )</span>
+                                        </div><!-- End .rating-container -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+
+                                <div class="product product-7 text-center">
+                                    <figure class="product-media">
+                                        <span class="product-label label-top">Top</span>
+                                        <a href="product.html">
+                                            <img id="product-zoom" src="{% static 'assets/images/products/single/fullwidth/3.jpg' %}" data-zoom-image="{% static 'assets/images/products/single/fullwidth/3-big.jpg" alt="product image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                        </div><!-- End .product-action-vertical -->
+
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">Shoes</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a href="product.html">Light brown studded Wide fit wedges</a></h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            $110.00
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text">( 1 Reviews )</span>
+                                        </div><!-- End .rating-container -->
+
+                                        <div class="product-nav product-nav-dots">
+                                            <a href="#" class="active" style="background: #8b513d;"><span class="sr-only">Color name</span></a>
+                                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            <a href="#" style="background: #d2b99a;"><span class="sr-only">Color name</span></a>
+                                        </div><!-- End .product-nav -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+
+                                <div class="product product-7 text-center">
+                                    <figure class="product-media">
+                                        <a href="product.html">
+                                            <img src="{% static 'assets/images/products/product-10.jpg' %}" alt="Product image" class="product-image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                        </div><!-- End .product-action-vertical -->
+
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">Jumpers</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a href="product.html">Yellow button front tea top</a></h3><!-- End .product-title -->
+                                        <div class="product-price">
+                                            $56.00
+                                        </div><!-- End .product-price -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text">( 0 Reviews )</span>
+                                        </div><!-- End .rating-container -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+                            </div><!-- End .owl-carousel -->
+                        </div><!-- End .col-lg-9 -->
+
+                        <aside class="col-lg-3">
+                            <div class="sidebar sidebar-product">
+                                <!-- Delivery Info -->
+                                <div class="widget widget-delivery p-3 border rounded">
+                                    <h4 class="widget-title d-flex align-items-center">
+                                        <i class="bi bi-geo-alt me-2 text-danger mr-2"></i> Delivery Info
+                                    </h4>
+                                    <p>
+                                        <i class="bi bi-geo-fill me-2 text-secondary"></i>{{ address.address }} <br />
+                                        {% if address.status == True %}
+                                            <span class="text-success">Verified Address <i class="fas fa-check-circle"></i>  </span>
+                                        {% else %}
+                                        <span class="text-danger">Unverified Address <i class="fas fa-times-circle"></i>  </span>
+                                        {% endif %}
+                                    </p>                                    
+                                    <p class="text-muted"><i class="bi bi-house-door me-2 text-secondary mr-2"></i> 123 Dummy Street, Block A</p>
+                                    <a href="#" class="text-primary text-decoration-none change-btn">
+                                        <i class="bi bi-pencil-square me-1"></i> Change
+                                    </a>
+                                </div>
+                        
+                                <!-- Return & Warranty -->
+                                <div class="widget widget-return-warranty p-3 border rounded mt-32">
+                                    <h4 class="widget-title d-flex align-items-center">
+                                        <i class="bi bi-shield-lock me-2 text-primary mr-2"></i> Return & Warranty
+                                    </h4>
+                                    <ul class="list-unstyled">
+                                        <li class="d-flex align-items-center">
+                                            <i class="bi bi-arrow-repeat me-2 text-success fs-5 mr-2"></i> {{p.vendor.authentic_rating}}% Authentic
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <i class="bi bi-shield-check me-2 text-info fs-5 mr-2"></i> {{p.vendor.days_return}} Days return
+                                        </li>
+                                        <li class="d-flex align-items-center">
+                                            <i class="bi bi-truck me-2 text-warning fs-5 mr-2"></i> {{p.vendor.warranty_period}} Months Warranty
+                                        </li>
+                                    </ul>
+                                </div>
+                        
+                                <!-- Vendor Info -->
+                                <div class="widget widget-vendor p-3 border rounded mt-3">
+                                    <h4 class="widget-title d-flex align-items-center">
+                                        <i class="bi bi-person-circle me-2 text-dark mr-2"></i> Vendor
+                                    </h4>
+                                
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <!-- Vendor Image -->
+                                        <img src="{{ p.vendor.image.url }}" alt="Vendor Image" class="vendor-image me-3">
+                                
+                                        <div class="flex-grow-1 ml-2">
+                                            <h5 class="mb-1">{{ p.vendor.title }}</h5>
+                                            <div class="text-warning small">
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-fill"></i>
+                                                <i class="bi bi-star-half"></i> <span>(4.5)</span>
+                                            </div>
+                                        </div>
+
+                                        <blockquote class="blockquote mt-2">
+                                            
+                                            <p><i class="bi bi-quote svg-inline--fa fa-quote-left fa-w-16 me-2 mr-2"></i>{{ p.vendor.description }}<i class="bi bi-quote svg-inline--fa fa-quote-right fa-w-16 ms-2 ml-2"></i></p>
+                                            
+                                        </blockquote>
+                                    </div>
+                                
+                                    <hr>
+                                
+                                    <!-- Vendor Details -->
+                                    <ul class="list-unstyled mt-2">
+                                        <li><i class="bi bi-geo-alt-fill text-secondary me-2"></i> <strong>Location:</strong> {{p.vendor.address}} </li>
+                                        <li><i class="bi bi-telephone-fill text-secondary me-2"></i> <strong>Contact:</strong> {{p.vendor.contact}} </li>
+                                    </ul>
+                                
+                                    <!-- Performance Stats -->
+                                    <div class="progress-container mt-3">
+                                        <p class="mb-1"><i class="bi bi-award text-success me-2"></i> <strong>Vendor Rating:</strong> 90%</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                
+                                        <p class="mb-1 mt-2"><i class="bi bi-truck text-primary me-2"></i> <strong>Shipping On Time:</strong>{{p.vendor.shipping_on_time}}%</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{p.vendor.shipping_on_time}}%;" aria-valuenow="{{p.vendor.shipping_on_time}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                
+                                        <p class="mb-1 mt-2"><i class="bi bi-chat-dots text-warning me-2"></i> <strong>Chat Response:</strong> {{p.vendor.chat_resp_time}}%</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{p.vendor.chat_resp_time}}%;" aria-valuenow="{{p.vendor.chat_resp_time}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                
+                                    <!-- Become a Vendor Section -->
+                                    <div class="text-center mt-4 border-top pt-3">
+                                        <p class="mb-2 fw-bold">Become a vendor?</p>
+                                        <a href="#" class="btn btn-outline-primary w-100">Register Now</a>
+                                    </div>
+                                </div>
+
+                                {% load static %}
+
+                                <div class="widget widget-categories p-3 border rounded mt-4">
+                                    <h4 class="widget-title d-flex align-items-center">
+                                        <i class="bi bi-tags-fill me-2 text-dark mr-2"></i> Categories
+                                    </h4>
+
+                                    <div class="list-group">
+                                        <!-- Category 1 -->
+                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                            <img src="{% static 'assets/images/products/product-4.jpg' %}" alt="Category Image" class="category-thumb me-3">
+                                            <div class="ml-2">
+                                                <h6 class="mb-0">Electronics</h6>
+                                                <small class="text-muted">Stock: 150 items</small>
+                                            </div>
+                                        </a>
+
+                                        <!-- Category 2 -->
+                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                            <img src="{% static 'assets/images/products/product-3.jpg' %}" alt="Category Image" class="category-thumb me-3">
+                                            <div class="ml-2">
+                                                <h6 class="mb-0">Fashion</h6>
+                                                <small class="text-muted">Stock: 230 items</small>
+                                            </div>
+                                        </a>
+
+                                        <!-- Category 3 -->
+                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                            <img src="{% static 'assets/images/products/product-2.jpg' %}" alt="Category Image" class="category-thumb me-3">
+                                            <div class="ml-2">
+                                                <h6 class="mb-0">Home Appliances</h6>
+                                                <small class="text-muted">Stock: 90 items</small>
+                                            </div>
+                                        </a>
+
+                                        <!-- Category 4 -->
+                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                            <img src="{% static 'assets/images/products/product-1.jpg' %}" alt="Category Image" class="category-thumb me-3">
+                                            <div class="ml-2">
+                                                <h6 class="mb-0">Sports & Outdoors</h6>
+                                                <small class="text-muted">Stock: 120 items</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+                        </aside>
+                        
+                    </div><!-- End .row -->
+
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+    let currentIndex = 0;
+    const images = document.querySelectorAll(".product-main-image img");
+    const figures = document.querySelectorAll(".product-main-image");
+    
+    // Hide all images except first
+    figures.forEach((fig, index) => {
+        if (index !== 0) fig.classList.add("hidden");
+    });
+
+    document.getElementById("next-main").addEventListener("click", function () {
+        navigateMain(1);
+    });
+
+    document.getElementById("prev-main").addEventListener("click", function () {
+        navigateMain(-1);
+    });
+
+    function navigateMain(direction) {
+        figures[currentIndex].classList.add("hidden");
+        currentIndex = (currentIndex + direction + figures.length) % figures.length;
+        figures[currentIndex].classList.remove("hidden");
+    }
+
+    // Thumbnail Click to Change Main Image
+    document.querySelectorAll(".product-gallery-item").forEach((thumb, index) => {
+        thumb.addEventListener("click", function (e) {
+            e.preventDefault();
+            figures[currentIndex].classList.add("hidden");
+            currentIndex = index;
+            figures[currentIndex].classList.remove("hidden");
+        });
+    });
+
+    // Scrollable Thumbnail Navigation
+    document.getElementById("next-thumb").addEventListener("click", function () {
+        document.getElementById("product-zoom-gallery").scrollBy({ left: 100, behavior: "smooth" });
+    });
+
+    document.getElementById("prev-thumb").addEventListener("click", function () {
+        document.getElementById("product-zoom-gallery").scrollBy({ left: -100, behavior: "smooth" });
+    });
+});
+
+        </script>
+
+        {% endblock content %}
+        
