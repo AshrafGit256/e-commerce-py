@@ -222,6 +222,7 @@
 
                        <div class="mb-5"></div><!-- End .mb-5 -->
 
+                      
                        <div class="bg-lighter trending-products">
                            <div class="heading heading-flex mb-3">
                                <div class="heading-left">
@@ -284,7 +285,7 @@
                                        <div class="product text-center">
                                            <figure class="product-media">
                                                <span class="product-label label-sale">-{{ p.get_percentage | floatformat:0 }}%</span>
-                                               <a href="product.html">
+                                               <a href="{% url 'core:product-detail' p.pid %}">
                                                    <img src="{{ p.image.url }}" alt="Product image" class="product-image">
                                                    <img src="{{ p.image.url }}" alt="Product image" class="product-image-hover">
                                                </a>
@@ -304,7 +305,7 @@
                                                <div class="product-cat">
                                                    <a href="#">{{ p.category.title }}</a>
                                                </div><!-- End .product-cat -->
-                                               <h3 class="product-title"><a href="product.html">{{ p.title }}</a></h3><!-- End .product-title -->
+                                               <h3 class="product-title"><a href="{% url 'core:product-detail' p.pid %}">{{ p.title }}</a></h3><!-- End .product-title -->
                                                <div class="product-price">
                                                    <span class="new-price">{{ p.price }}</span>
                                                    <span class="old-price">Was {{ p.old_price }}</span>
@@ -1273,6 +1274,7 @@
                                </div><!-- .End .tab-pane -->
                            </div><!-- End .tab-content -->
                        </div><!-- End .bg-lighter -->
+                       
 
                        <div class="mb-5"></div><!-- End .mb-5 -->
 
