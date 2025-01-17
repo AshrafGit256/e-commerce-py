@@ -4,6 +4,7 @@ from django.utils.html import mark_safe
 from userauths.models import User
 from decimal import Decimal
 from taggit.managers import TaggableManager
+from ckeditor_uploader.fields import RichTextUploadingField
 
 STATUS_CHOICE = [
     ("process", "Processing"),
@@ -54,7 +55,8 @@ class Vendor(models.Model):
     title = models.CharField(max_length=100, default="Nestify")
     image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
     cover_image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
-    description = models.TextField(null=True, blank=True, default="I am an amazing vendor")
+    # description = models.TextField(null=True, blank=True, default="I am an amazing vendor")
+    description = RichTextUploadingField(null=True, blank=True, default="I am an amazing vendor")
         
     address = models.CharField(max_length=100, default="123 Main Street, London")
     contact = models.CharField(max_length=100, default="+123 (456) 780")
@@ -87,12 +89,15 @@ class Product(models.Model):
         
     title = models.CharField(max_length=100, default="Racing Boots")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
-    description = models.TextField(null=True, blank=True, default="This is the product")
+    # description = models.TextField(null=True, blank=True, default="This is the product")
+    description = RichTextUploadingField(null=True, blank=True, default="This is the product")
     
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("1.99"))
     old_price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("2.99"))
     
-    specifications = models.TextField(null=True, blank=True)
+    # specifications = models.TextField(null=True, blank=True)
+    specifications = RichTextUploadingField(null=True, blank=True)
+    
     type = models.CharField(max_length=100, default="Organic", null=True, blank=True)
     stock_count = models.CharField(max_length=100, default="10", null=True, blank=True)
     life = models.CharField(max_length=100, default="100 Days", null=True, blank=True)

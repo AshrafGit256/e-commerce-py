@@ -153,3 +153,19 @@ JAZZMIN_SETTINGS = {
 }
 
 AUTH_USER_MODEL = 'userauths.User'
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',  # Updated skin
+        'codeSnippet_theme': 'monokai',
+        'toolbar': 'full',  # 'all' is not a valid option, use 'full' instead
+        'extraPlugins': ','.join([
+            'codesnippet',  # Corrected from 'codesnippets'
+            'widget',       # Corrected from 'widgets' (CKEditor uses 'widget')
+            'dialog'        # Corrected from 'dialogs' (CKEditor uses 'dialog')
+        ])
+    }
+}
+
