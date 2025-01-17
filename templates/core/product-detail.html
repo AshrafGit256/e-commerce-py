@@ -280,7 +280,7 @@
                                                     <div class="product-details-footer">
                                                         <div class="product-cat">
                                                             <div class="mb-2"><span>SKU:</span> <a href="#">{{p.sku}}</a></div>
-                                                            <div class="mb-2"><span>MFG:</span> <a href="#">{{p.mfd|date:"d M, Y"}}</a></div>
+                                                            <div class="mb-2"><span>TAGS:</span> {% for tag in p.tags.all %} <a href="{% url 'core:tags' tag.slug %}"> #{{tag.name}} </a>, {% endfor %}</div>
                                                             <div><span>Stock:</span> <a href="#"><b>{{p.stock_count}}</b> items in stock</a></div>
                                                         </div>
                                                     </div>
